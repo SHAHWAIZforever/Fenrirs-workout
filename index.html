@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FËÑRÎR'S 25 mins of HELL</title>
+    <!-- Tailwind CSS for modern responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #080808; color: #f3f4f6; }
+        .red-glow {
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.35);
+        }
+        .red-glow-sm {
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.2);
+        }
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.03); opacity: 0.85; }
+        }
+        /* Custom scrollbar for dark red theme */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0c0c0c; }
+        ::-webkit-scrollbar-thumb { background: #262626; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #dc2626; }
+    </style>
+</head>
+<body class="h-full flex flex-col justify-between overflow-x-hidden">
+
+    <!-- Header -->
+    <header class="w-full bg-[#0c0c0c]/90 backdrop-blur-md border-b border-red-950/60 py-4 px-6 sticky top-0 z-50 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="bg-red-600 text-white p-2.5 rounded-xl shadow-lg shadow-red-600/30 flex items-center justify-center">
+                <i class="fa-solid fa-dumbbell text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-base sm:text-xl font-black tracking-tight bg-gradient-to-r from-red-500 via-rose-400 to-white bg-clip-text text-transparent">FËÑRÎR'S 25 mins of HELL</h1>
+                <p class="text-xs text-neutral-400 font-medium">My Workout • 25 min calisthenics</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center space-x-2 sm:space-x-3">
+            <button id="voiceToggle" class="bg-neutral-900 hover:bg-neutral-800 text-neutral-300 px-3 py-2 rounded-xl text-xs font-semibold flex items-center space-x-2 border border-neutral-800 transition active:scale-95 cursor-pointer" title="Toggle Voice Coach">
+                <i id="voiceIcon" class="fa-solid fa-volume-high text-red-500 text-sm"></i>
+                <span id="voiceText" class="hidden md:inline">Voice: On</span>
+            </button>
+            <button id="soundToggle" class="bg-neutral-900 hover:bg-neutral-800 text-neutral-300 px-3 py-2 rounded-xl text-xs font-semibold flex items-center space-x-2 border border-neutral-800 transition active:scale-95 cursor-pointer" title="Toggle Sound Beeps">
+                <i id="soundIcon" class="fa-solid fa-bell text-amber-500 text-sm"></i>
+                <span id="soundText" class="hidden md:inline">Beeps: On</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow flex flex-col items-center p-4 sm:p-6 max-w-5xl mx-auto w-full space-y-8">
+        
+        <!-- Navigation Tabs for Sections -->
+        <div class="flex items-center space-x-2 bg-neutral-900/80 p-1.5 rounded-2xl border border-neutral-800 overflow-x-auto max-w-full">
+            <button onclick="switchTab('timer')" id="tabBtn-timer" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center space-x-2 bg-red-600 text-white shadow-md shadow-red-600/30 cursor-pointer">
+                <i class="fa-solid fa-stopwatch"></i>
+                <span>Workout Timer</span>
+            </button>
+            <button onclick="switchTab('tools')" id="tabBtn-tools" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center space-x-2 text-neutral-400 hover:text-white hover:bg-neutral-800 cursor-pointer">
+                <i class="fa-solid fa-calculator"></i>
+                <span>Weight & Calorie AI</span>
+            </button>
+            <button onclick="switchTab('manual')" id="tabBtn-manual" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center space-x-2 text-neutral-400 hover:text-white hover:bg-neutral-800 cursor-pointer">
+                <i class="fa-solid fa-book-open"></i>
+                <span>Complete Manual & Rules</span>
+            </button>
+        </div>
+
+        <!-- TAB 1: WORKOUT TIMER -->
+        <div id="tab-timer" class="w-full space-y-6">
+            
+            <!-- Overall Progress Bar -->
+            <div class="w-full bg-neutral-900 rounded-full h-3 p-0.5 border border-neutral-800 overflow-hidden shadow-inner">
+                <div id="totalProgressBar" class="bg-gradient-to-r from-red-600 via-rose-500 to-amber-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Main Workout Display Card -->
+            <div id="mainCard" class="w-full bg-[#121212] border border-neutral-800/80 rounded-3xl p-6 sm:p-10 red-glow-sm relative overflow-hidden transition-all duration-500">
+                
+                <!-- Background glow accent -->
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
+                    
+                    <!-- Left: Current Exercise Info -->
+                    <div class="flex-1 text-center lg:text-left space-y-3">
+                        <div class="inline-flex items-center space-x-2 bg-red-500/10 text-red-400 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-red-500/20">
+                            <i id="phaseIcon" class="fa-solid fa-fire"></i>
+                            <span id="phaseIndexText">Stage 1 of 9</span>
+                        </div>
+                        <h2 id="currentExerciseName" class="text-3xl sm:text-5xl font-black text-white tracking-tight">Warm Up</h2>
+                        <p id="currentExerciseDesc" class="text-neutral-400 text-sm sm:text-base max-w-lg">1 min warm up: Prepare your body with dynamic movements and raise heart rate.</p>
+                        
+                        <!-- Hydration reminder badge -->
+                        <div class="inline-flex items-center space-x-2 bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-xl text-xs text-neutral-300 mt-2">
+                            <i class="fa-solid fa-glass-water text-cyan-400"></i>
+                            <span>Hydration: At least 1 glass of water 30 min before workout</span>
+                        </div>
+                    </div>
+
+                    <!-- Right: Huge Circular Timer Countdown -->
+                    <div class="flex flex-col items-center justify-center">
+                        <div class="relative w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center rounded-full border-4 border-neutral-800 bg-[#0a0a0a] shadow-2xl pulse-ring">
+                            <!-- Circular SVG Timer ring -->
+                            <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="44" stroke="currentColor" stroke-width="6" class="text-neutral-900 fill-none" />
+                                <circle id="timerProgressCircle" cx="50" cy="50" r="44" stroke="currentColor" stroke-width="6" class="text-red-600 fill-none transition-all duration-1000" stroke-dasharray="276.46" stroke-dashoffset="0" stroke-linecap="round" />
+                            </svg>
+                            
+                            <!-- Time text inside ring -->
+                            <div class="flex flex-col items-center z-10">
+                                <span id="timerDisplay" class="text-4xl sm:text-6xl font-black font-mono tracking-tighter text-white">01:00</span>
+                                <span id="timerSubtext" class="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mt-1">Remaining</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Controls Bar -->
+                <div class="mt-8 pt-6 border-t border-neutral-800/80 flex flex-wrap items-center justify-center gap-4">
+                    <button id="startPauseBtn" class="bg-red-600 hover:bg-red-500 text-white font-bold px-8 py-3.5 rounded-2xl shadow-lg shadow-red-600/30 flex items-center space-x-3 transition active:scale-95 cursor-pointer text-base">
+                        <i id="startPauseIcon" class="fa-solid fa-play"></i>
+                        <span id="startPauseText">Start Workout</span>
+                    </button>
+                    <button id="resetBtn" class="bg-neutral-900 hover:bg-neutral-800 text-neutral-300 font-semibold px-6 py-3.5 rounded-2xl border border-neutral-800 flex items-center space-x-2 transition active:scale-95 cursor-pointer text-base">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Reset</span>
+                    </button>
+                    <button id="skipBtn" class="bg-neutral-900 hover:bg-neutral-800 text-neutral-300 font-semibold px-6 py-3.5 rounded-2xl border border-neutral-800 flex items-center space-x-2 transition active:scale-95 cursor-pointer text-base">
+                        <i class="fa-solid fa-forward-step"></i>
+                        <span>Skip Stage</span>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Upcoming Exercise Preview Card -->
+            <div class="w-full bg-[#121212] border border-neutral-800/80 rounded-2xl p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-neutral-900 p-2.5 rounded-xl text-red-500 border border-neutral-800">
+                        <i class="fa-solid fa-angles-right"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Upcoming Next</span>
+                        <span id="upcomingName" class="text-sm font-semibold text-neutral-200">Push (4 min)</span>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span id="totalTimeRemaining" class="text-xs font-mono text-neutral-300 bg-neutral-900 px-3 py-1.5 rounded-xl border border-neutral-800">Total: 25:00</span>
+                </div>
+            </div>
+
+            <!-- Routine Schedule Drawer -->
+            <div class="w-full bg-[#121212] border border-neutral-800 rounded-2xl p-5">
+                <h3 class="text-xs font-bold text-neutral-300 uppercase tracking-wider mb-4 flex items-center justify-between">
+                    <span><i class="fa-solid fa-list-check text-red-500 mr-2"></i>My Workout Routine (25 Mins Total)</span>
+                    <span class="text-xs text-neutral-500 font-normal">9 Stages</span>
+                </h3>
+                <div id="playlistContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB 2: IDEAL WEIGHT CALCULATOR & AI CALORIE ESTIMATOR -->
+        <div id="tab-tools" class="w-full space-y-8 hidden">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Ideal Weight Range Calculator Card -->
+                <div class="bg-[#121212] border border-neutral-800 rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="bg-red-500/10 text-red-500 p-3 rounded-2xl border border-red-500/20">
+                                <i class="fa-solid fa-scale-balanced text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">Ideal Weight & Maintenance</h3>
+                                <p class="text-xs text-neutral-400">Calculated with FËÑRÎR'S formulas</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4 mt-6">
+                            <div>
+                                <label class="block text-xs font-bold text-neutral-400 uppercase tracking-wider mb-2">Height (cm or inches)</label>
+                                <div class="flex space-x-2">
+                                    <input type="number" id="calcHeight" placeholder="e.g. 175" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-600 font-mono">
+                                    <select id="heightUnit" class="bg-neutral-900 border border-neutral-800 rounded-xl px-3 py-3 text-white text-sm focus:outline-none focus:border-red-600">
+                                        <option value="cm">cm</option>
+                                        <option value="in">inches</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-neutral-400 uppercase tracking-wider mb-2">Current Weight (kg)</label>
+                                <input type="number" id="calcWeightKg" placeholder="e.g. 70" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-600 font-mono">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-neutral-400 uppercase tracking-wider mb-2">Activity Profile</label>
+                                <select id="calcProfile" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-red-600">
+                                    <option value="workout">Workout Days (15 × 2.2 × kg)</option>
+                                    <option value="normal">Normal / Maintenance (14 × 2.2 × kg)</option>
+                                    <option value="obesity">Obesity / Cut (13 × 2.2 × kg)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <button onclick="calculateMetrics()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-600/30 transition active:scale-95 cursor-pointer">
+                            Calculate Ideal Weight & Calories
+                        </button>
+                        
+                        <div id="calcResults" class="mt-6 p-4 bg-neutral-900 border border-neutral-800 rounded-2xl hidden space-y-2">
+                            <div class="flex justify-between text-xs sm:text-sm">
+                                <span class="text-neutral-400">Ideal Weight Range:</span>
+                                <span id="resIdealWeight" class="font-bold font-mono text-white">--</span>
+                            </div>
+                            <div class="flex justify-between text-xs sm:text-sm">
+                                <span class="text-neutral-400">Maintenance Calories:</span>
+                                <span id="resMaintCals" class="font-bold font-mono text-red-400">-- kcal</span>
+                            </div>
+                            <div class="flex justify-between text-xs sm:text-sm">
+                                <span class="text-neutral-400">Weight Loss (-500 kcal):</span>
+                                <span id="resLossCals" class="font-bold font-mono text-amber-400">-- kcal</span>
+                            </div>
+                            <div class="flex justify-between text-xs sm:text-sm">
+                                <span class="text-neutral-400">Muscle Mass Gain (+500 kcal):</span>
+                                <span id="resGainCals" class="font-bold font-mono text-emerald-400">-- kcal</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Food Calorie Estimator Card -->
+                <div class="bg-[#121212] border border-neutral-800 rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="bg-red-500/10 text-red-500 p-3 rounded-2xl border border-red-500/20">
+                                <i class="fa-solid fa-utensils text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">AI Food Calorie Estimator</h3>
+                                <p class="text-xs text-neutral-400">Powered by Gemini AI • Follows FËÑRÎR'S rules</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 mt-6">
+                            <div>
+                                <label class="block text-xs font-bold text-neutral-400 uppercase tracking-wider mb-2">Describe your food or meal</label>
+                                <textarea id="foodInput" rows="3" placeholder="e.g. 1 bowl of chicken biryani with raita, or 2 eggs and toast..." class="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-600 text-sm resize-none"></textarea>
+                            </div>
+                            
+                            <!-- Quick tag buttons -->
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="setFoodQuery('1 bowl of Biryani')" class="bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-xs px-3 py-1.5 rounded-lg text-neutral-300">Biryani</button>
+                                <button onclick="setFoodQuery('2 boiled eggs and 1 banana')" class="bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-xs px-3 py-1.5 rounded-lg text-neutral-300">Eggs & Banana</button>
+                                <button onclick="setFoodQuery('1 plate of daal chawal')" class="bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-xs px-3 py-1.5 rounded-lg text-neutral-300">Daal Chawal</button>
+                                <button onclick="setFoodQuery('Protein shake with 1 banana & milk')" class="bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-xs px-3 py-1.5 rounded-lg text-neutral-300">Protein Shake</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <button id="aiEstimateBtn" onclick="estimateCalories()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-600/30 transition active:scale-95 cursor-pointer flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>Estimate Calories & Protein</span>
+                        </button>
+
+                        <div id="aiResultBox" class="mt-6 p-4 bg-neutral-900 border border-neutral-800 rounded-2xl hidden space-y-3">
+                            <div class="flex items-center justify-between border-b border-neutral-800 pb-2">
+                                <span class="text-xs font-bold uppercase tracking-wider text-red-500">AI Analysis</span>
+                                <span id="aiFoodTitle" class="text-xs text-neutral-400 font-mono"></span>
+                            </div>
+                            <div id="aiResultContent" class="text-sm text-neutral-200 space-y-2">
+                                <!-- Populated by AI -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- TAB 3: COMPLETE WORKOUT MANUAL & RULES -->
+        <div id="tab-manual" class="w-full space-y-6 hidden">
+            
+            <!-- Core Rules & Philosophy Card -->
+            <div class="bg-[#121212] border border-neutral-800 rounded-3xl p-6 sm:p-8 space-y-6">
+                <div class="flex items-center space-x-3 border-b border-neutral-800 pb-4">
+                    <div class="bg-red-500/10 text-red-500 p-3 rounded-2xl border border-red-500/20">
+                        <i class="fa-solid fa-shield-halved text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Core Training Philosophy & Golden Rules</h3>
+                        <p class="text-xs text-neutral-400">Read carefully before every 25-minute calisthenics session</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-neutral-900/60 p-4 rounded-2xl border border-neutral-800 space-y-2">
+                        <span class="text-red-500 font-bold text-xs uppercase tracking-wider block"><i class="fa-solid fa-glass-water mr-1.5"></i>Hydration Rule</span>
+                        <p class="text-xs text-neutral-300">At least 1 glass of water 30 minutes before your workout session.</p>
+                    </div>
+                    <div class="bg-neutral-900/60 p-4 rounded-2xl border border-neutral-800 space-y-2">
+                        <span class="text-red-500 font-bold text-xs uppercase tracking-wider block"><i class="fa-solid fa-bolt mr-1.5"></i>Intensity Rule</span>
+                        <p class="text-xs text-neutral-300">Every single set go super intense! Each set should be to absolute failure trying to get another rep.</p>
+                    </div>
+                    <div class="bg-neutral-900/60 p-4 rounded-2xl border border-neutral-800 space-y-2">
+                        <span class="text-red-500 font-bold text-xs uppercase tracking-wider block"><i class="fa-solid fa-person-walking-arrow-loop-left mr-1.5"></i>Rest Days & CNS</span>
+                        <p class="text-xs text-neutral-300">Take rest days on CNS fatigue or muscle soreness, but target particular sore body parts rather than full body rest.</p>
+                    </div>
+                </div>
+
+                <!-- The 2-Set Method & Calorie Science -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                    <div class="bg-neutral-900/40 p-5 rounded-2xl border border-neutral-800 space-y-3">
+                        <h4 class="font-bold text-sm text-red-400 flex items-center">
+                            <i class="fa-solid fa-layer-group mr-2"></i>The 2-Set Method & Rest
+                        </h4>
+                        <ul class="text-xs text-neutral-300 space-y-2 list-disc list-inside">
+                            <li>Target reps: <strong class="text-white">8 reps per set</strong>.</li>
+                            <li>If isometric hold: <strong class="text-white">1 full minute</strong> (excluding planche).</li>
+                            <li>If you can't complete 8 reps, immediately regress to <strong class="text-white">partials or easier regressions</strong> to finish set reps.</li>
+                            <li>Main goal: Hard progression every rep. If you hit 8 clean reps, move to a harder variation next time!</li>
+                            <li>Rest time: <strong class="text-white">40-60 seconds</strong> between sets (due to the tight 25 min duration).</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-neutral-900/40 p-5 rounded-2xl border border-neutral-800 space-y-3">
+                        <h4 class="font-bold text-sm text-red-400 flex items-center">
+                            <i class="fa-solid fa-fire-flame-curved mr-2"></i>Calorie & Nutrition Formulas
+                        </h4>
+                        <ul class="text-xs text-neutral-300 space-y-2 list-disc list-inside">
+                            <li><strong>Obesity / Cut:</strong> 13 × 2.2 × kg</li>
+                            <li><strong>Normal Maintenance:</strong> 14 × 2.2 × kg</li>
+                            <li><strong>Workout Days:</strong> 15 × 2.2 × kg</li>
+                            <li><strong class="text-white">Calories determine weight</strong> (drop 500 kcal for fat loss, add 500 kcal for mass).</li>
+                            <li><strong class="text-white">Protein determines body composition.</strong> If tracking protein is hard, just track calories consistently!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Exercise Sections Accordion -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold text-white px-2">Detailed Exercise Library & Variations</h3>
+                
+                <!-- 1. Warm Up -->
+                <div class="bg-[#121212] border border-neutral-800 rounded-2xl p-5">
+                    <div class="flex items-center justify-between cursor-pointer" onclick="toggleAccordion('warmup-content')">
+                        <h4 class="font-bold text-white text-base flex items-center">
+                            <span class="bg-red-600 text-white text-xs px-2.5 py-1 rounded-lg mr-3 font-mono">1 Min</span>
+                            Warm Up
+                        </h4>
+                        <i class="fa-solid fa-chevron-down text-neutral-400" id="icon-warmup-content"></i>
+                    </div>
+                    <div id="warmup-content" class="mt-4 pt-4 border-t border-neutral-800 text-xs text-neutral-300 space-y-2">
+                        <p class="font-semibold text-white">HIGH KNEES With Arm rotations</p>
+                        <p class="text-neutral-400">Note: ( / ) means alternatives. Choose whatever you like, difficulty-wise they are similar.</p>
+                    </div>
+                </div>
+
+                <!-- 2. Upper Back -->
+                <div class="bg-[#121212] border border-neutral-800 rounded-2xl p-5">
+                    <div class="flex items-center justify-between cursor-pointer" onclick="toggleAccordion('upperback-content')">
+                        <h4 class="font-bold text-white text-base flex items-center">
+                            <span class="bg-red-600 text-white text-xs px-2.5 py-1 rounded-lg mr-3 font-mono">4 Min</span>
+                            Upper Back
+                        </h4>
+                        <i class="fa-solid fa-chevron-down text-neutral-400" id="icon-upperback-content"></i>
+                    </div>
+                    <div id="upperback-content" class="mt-4 pt-4 border-t border-neutral-800 text-xs text-neutral-300 space-y-2">
+                        <p class="text-neutral-400 italic">Elbows wider than shoulder width but not 90°.</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>ELBOW PRESS isometric hold at hips</li>
+                            <li>ELBOW PRESS FOR REPS AT HIPS</li>
+                            <li>ELBOW PRESS ISOMETRIC AT FEET</li>
+                            <li>ELBOW PRESS FOR REPS ON FEET</li>
+                            <li class="text-red-400 font-semibold">OR / Behind the neck PULLUPS</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 3. Abdominals -->
+                <div class="bg-[#121212] border border-neutral-800 rounded-2xl p-5">
+                    <div class="flex items-center justify-between cursor-pointer" onclick="toggleAccordion('abs-content')">
+                        <h4 class="font-bold text-white text-base flex items-center">
+                            <span class="bg-red-600 text-white text-xs px-2.5 py-1 rounded-lg mr-3 font-mono">3 Min</span>
+                            Abdominals / Core
+                        </h4>
+                        <i class="fa-solid fa-chevron-down text-neutral-400" id="icon-abs-content"></i>
+                    </div>
+                    <div id="abs-content" class="mt-4 pt-4 border-t border-neutral-800 text-xs text-neutral-300 space-y-2">
+                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <li>• Mountain climbers</li>
+                            <li>• Plank (15 mins total accumulation)</li>
+                            <li>• Leg raises (50 reps)</li>
+                            <li>• Cross leg sit</li>
+                            <li>• Pike compressions</li>
+                            <li>• L sit with feet on wall</li>
+                            <li>• L sit one leg on wall</li>
+                            <li>• L sits</li>
+                            <li>• Dragon Flag (As horizontal as possible, strict form)</li>
+                            <li>• Dynamic Dragon flags (Almost touch floor before going up, keep rigid body)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 4. Push -->
+                <div class="bg-[#121212] border border-neutral-800 rounded-2xl p-5">
+                    <div class="flex items-center justify-between cursor-pointer" onclick="toggleAccordion('push-content')">
+                        <h4 class="font-bold text-white text-base flex items-center">
+                            <span class="bg-red-600 text-white text-xs px-2.5 py-1 rounded-lg mr-3 font-mono">4 Min</span>
+                            Push
+                        </h4>
+                        <i class="fa-solid fa-chevron-down text-neutral-400" id="icon-push-content"></i>
+                    </div>
+                    <div id="push-content" class="mt-4 pt-4 border-t border-neutral-800 text-xs text-neutral-300 space-y-3">
+                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <li>• Incline or knee pushups</li>
+                            <li>• Standard Pushups</li>
+                            <li>• Decline Pushups</li>
+                            <li>• Archer Pushups</li>
+                            <li>• Optional: One arm pushups (Skill)</li>
+                            <li>• Explosive Pushups & Leg variations</li>
+                            <li>• Clap pushups</li>
+                            <li>• Pseudo lean Pushups (At waist level, not crossed)</li>
+                        </ul>
+                        <div class="bg-neutral-900 p-3 rounded-xl border border-neutral-800 space-y-1">
+                            <p class="font-semibold text-red-400">Advanced Planche & Handstand Notes:</p>
+                            <p class="text-neutral-400">Wall handstand pushups (conscious trap forward motion). Straddle planche bent arms (enter every leaning skill from a bent arm press). <strong class="text-white">Posterior pelvic tilt is mandatory</strong> in all planche moves. Tuck planche pushups (hips/butt high, no dropped hips) / Tuck planche hold 20+ sec. Advanced tuck planche & Straddle planche 20+ sec.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Legs -->
+                <div class="bg-[#121212] border border-neutral-800 rounded-2xl p-5">
+                    <div class="flex items-center justify-between cursor-pointer" onclick="toggleAccordion('legs-content')">
+                        <h4 class="font-bold text-white text-base flex items-center">
+                            <span class="bg-red-600 text-white text-xs px-2.5 py-1 rounded-lg mr-3 font-mono">4 Min</span>
+                            Legs
+                        </h4>
+                        <i class="fa-solid fa-chevron-down text-neutral-400" id="icon-legs-content"></i>
+                    </div>
+                    <div id="legs-content" class="mt-4 pt-4 border-t border-neutral-800 text-xs text-neutral-300 space-y-2">
+                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <li>• Wall sits (2 min)</li>
+                            <li>• Squats (50 reps)</li>
+                            <li>• Jumping squats (30 reps)</li>
+                            <li>• Narrow squats (50 reps)</li>
+                            <li>• Side to side squats (25 each side)</li>
+                            <li>• Assisted sissy squats / Sissy squats (knee touch ground)</li>
+                            <li>• Pistol squats (Non-dominant leg always straight)</li>
+                            <li>• Pistol squats negative / Hand assisted / Cross armed / Prisoner</li>
+                            <li>• One leg sissy squat / Single leg sissy squat (assisted sliding)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 6. Tricep -->
+                <div class="bg-[#121212] border border-neutral-800 rounded-2xl p-5">
+                    <div class="flex items-center justify-between cursor-pointer" onclick="toggleAccordion('tricep-content')">
+                        <h4 class="font-bold text-white text-base flex items-center">
+                            <span class="bg-red-600 text-white text-xs px-2.5 py-1 rounded-lg mr-3 font-mono">3 Min</span>
+                            Tricep (Trained at end for gap)
+                        </h4>
+                        <i class="fa-solid fa-chevron-down text-neutral-400" id="icon-tricep-content"></i>
+                    </div>
+                    <div id="tricep-content" class="mt-4 pt-4 border-t border-neutral-800 text-xs text-neutral-300 space-y-3">
+                        <p class="font-semibold text-white">DIAMOND PUSHUPS (Full range, slight elbow flare for tricep bias) — Goal: 50-100 reps in one set to failure + partials!</p>
+                        <div class="bg-neutral-900 p-3 rounded-xl border border-neutral-800 space-y-1">
+                            <p class="font-semibold text-red-400">FËÑRÎR'S PR Log:</p>
+                            <p class="text-neutral-400">3 Aug 2026: 33 diamond pushups | 15 Aug 2026: 35 | 20 Aug 2026: 36</p>
+                        </div>
+                        <p class="text-neutral-400">OR: Diamond bench dips (with feet elevated on stair/wall, lean back, extend back, whole body straight, extreme depth).</p>
+                    </div>
+                </div>
+
+                <!-- 7. Back -->
+                <div class="bg-[#121212] border border-neutral-800 rounded-2xl p-5">
+                    <div class="flex items-center justify-between cursor-pointer" onclick="toggleAccordion('back-content')">
+                        <h4 class="font-bold text-white text-base flex items-center">
+                            <span class="bg-red-600 text-white text-xs px-2.5 py-1 rounded-lg mr-3 font-mono">4 Min</span>
+                            Back / Pull
+                        </h4>
+                        <i class="fa-solid fa-chevron-down text-neutral-400" id="icon-back-content"></i>
+                    </div>
+                    <div id="back-content" class="mt-4 pt-4 border-t border-neutral-800 text-xs text-neutral-300 space-y-2">
+                        <p class="font-semibold text-white">Important: Grip should be real tight, constantly trying to curl wrist down to eventually get the FALSE GRIP.</p>
+                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <li>• Jumping pullups negatives</li>
+                            <li>• Pullups isometric holds (2 min)</li>
+                            <li>• Chinups & Pullups</li>
+                            <li>• L-SIT pullups</li>
+                            <li>• 10kg weighted pullups OR 13+ Pullups</li>
+                            <li>• Archer pullups</li>
+                            <li>• One arm training (Shoulder grab / rows / leg supported)</li>
+                            <li>• One arm lock off (90° isometric with pinky finger 1+ min)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 8. Stretch -->
+                <div class="bg-[#121212] border border-neutral-800 rounded-2xl p-5">
+                    <div class="flex items-center justify-between cursor-pointer" onclick="toggleAccordion('stretch-content')">
+                        <h4 class="font-bold text-white text-base flex items-center">
+                            <span class="bg-red-600 text-white text-xs px-2.5 py-1 rounded-lg mr-3 font-mono">1 Min</span>
+                            Stretch
+                        </h4>
+                        <i class="fa-solid fa-chevron-down text-neutral-400" id="icon-stretch-content"></i>
+                    </div>
+                    <div id="stretch-content" class="mt-4 pt-4 border-t border-neutral-800 text-xs text-neutral-300 space-y-2">
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Toe touch</li>
+                            <li>Calf grab stretch (Goal: touch head to knees)</li>
+                            <li>Front splits (30s each side)</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-4 text-xs text-neutral-500 border-t border-neutral-900 bg-[#0c0c0c]">
+        Shahwaiz's workout timer • Red & Black Calisthenics Edition
+    </footer>
+
+    <script>
+        // Workout Routine Schedule Data
+        const routine = [
+            { id: 1, name: "Warm Up", duration: 60, desc: "1 min warm up: High knees with arm rotations. Prepare body dynamically.", icon: "fa-fire" },
+            { id: 2, name: "Push", duration: 240, desc: "4 min push: Pushups, incline/decline, archer, or planche progressions to failure.", icon: "fa-arrow-up-right-dots" },
+            { id: 3, name: "Rest", duration: 60, desc: "1 min rest: Deep breathing, hydrate, and recover.", icon: "fa-mug-hot" },
+            { id: 4, name: "Pull", duration: 240, desc: "4 min pull: Chinups, pullups, false grip, and vertical pulling.", icon: "fa-arrow-down-left-and-up-right-to-center" },
+            { id: 5, name: "Tricep", duration: 180, desc: "3 min tricep: Diamond pushups to failure + partial reps or bench dips.", icon: "fa-bolt" },
+            { id: 6, name: "Upper Back", duration: 240, desc: "4 min upper back: Elbow press variations or behind-the-neck pullups.", icon: "fa-shield-halved" },
+            { id: 7, name: "Leg", duration: 240, desc: "4 min leg: Squats, jumping squats, sissy squats, or pistol squat progressions.", icon: "fa-person-running" },
+            { id: 8, name: "Core", duration: 180, desc: "3 min core: Planks, leg raises, L-sits, and Dragon Flags.", icon: "fa-circle-dot" },
+            { id: 9, name: "Stretch", duration: 60, desc: "1 min stretch: Toe touch, calf grab, and front splits.", icon: "fa-spa" }
+        ];
+
+        let currentIndex = 0;
+        let timeRemaining = routine[0].duration;
+        const totalWorkoutDuration = routine.reduce((acc, curr) => acc + curr.duration, 0);
+        let timerInterval = null;
+        let isRunning = false;
+        let voiceEnabled = true;
+        let soundEnabled = true;
+        let speechSynth = window.speechSynthesis;
+
+        // DOM Element references
+        const startPauseBtn = document.getElementById('startPauseBtn');
+        const startPauseIcon = document.getElementById('startPauseIcon');
+        const startPauseText = document.getElementById('startPauseText');
+        const resetBtn = document.getElementById('resetBtn');
+        const skipBtn = document.getElementById('skipBtn');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const currentExerciseName = document.getElementById('currentExerciseName');
+        const currentExerciseDesc = document.getElementById('currentExerciseDesc');
+        const phaseIndexText = document.getElementById('phaseIndexText');
+        const phaseIcon = document.getElementById('phaseIcon');
+        const upcomingName = document.getElementById('upcomingName');
+        const totalProgressBar = document.getElementById('totalProgressBar');
+        const timerProgressCircle = document.getElementById('timerProgressCircle');
+        const totalTimeRemaining = document.getElementById('totalTimeRemaining');
+        const voiceToggle = document.getElementById('voiceToggle');
+        const voiceIcon = document.getElementById('voiceIcon');
+        const voiceText = document.getElementById('voiceText');
+        const soundToggle = document.getElementById('soundToggle');
+        const soundIcon = document.getElementById('soundIcon');
+        const soundText = document.getElementById('soundText');
+        const playlistContainer = document.getElementById('playlistContainer');
+
+        // Audio Context for Beeps
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playBeep(freq = 440, duration = 0.15) {
+            if (!soundEnabled) return;
+            try {
+                if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) { console.log("Audio error", e); }
+        }
+
+        function speak(text) {
+            if (!voiceEnabled || !speechSynth) return;
+            try {
+                speechSynth.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 1.05;
+                utterance.pitch = 1.0;
+                speechSynth.speak(utterance);
+            } catch (e) { console.log("Speech error", e); }
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function renderPlaylist() {
+            playlistContainer.innerHTML = '';
+            routine.forEach((item, index) => {
+                const isCurrent = index === currentIndex;
+                const isPassed = index < currentIndex;
+                
+                let bgClass = "bg-neutral-900/60 border-neutral-800 text-neutral-400";
+                if (isCurrent) bgClass = "bg-red-600/20 border-red-600 text-red-300 ring-1 ring-red-500/50 shadow-md";
+                else if (isPassed) bgClass = "bg-neutral-950 border-neutral-900 text-neutral-600 opacity-60";
+
+                const card = document.createElement('div');
+                card.className = `p-3 rounded-xl border flex flex-col justify-between transition-all ${bgClass}`;
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider">#${index + 1}</span>
+                        <span class="text-xs font-mono font-semibold">${Math.round(item.duration / 60)}m</span>
+                    </div>
+                    <div class="text-xs font-bold truncate">${item.name}</div>
+                `;
+                playlistContainer.appendChild(card);
+            });
+        }
+
+        function updateUI() {
+            const current = routine[currentIndex];
+            currentExerciseName.textContent = current.name;
+            currentExerciseDesc.textContent = current.desc;
+            phaseIndexText.textContent = `Stage ${currentIndex + 1} of ${routine.length}`;
+            phaseIcon.className = `fa-solid ${current.icon}`;
+            timerDisplay.textContent = formatTime(timeRemaining);
+
+            if (currentIndex + 1 < routine.length) {
+                const next = routine[currentIndex + 1];
+                upcomingName.textContent = `${next.name} (${Math.round(next.duration / 60)} min)`;
+            } else {
+                upcomingName.textContent = "Final Stage - Finish Strong!";
+            }
+
+            const totalDuration = current.duration;
+            const elapsed = totalDuration - timeRemaining;
+            const circumference = 2 * Math.PI * 44;
+            const offset = circumference - (elapsed / totalDuration) * circumference;
+            timerProgressCircle.style.strokeDashoffset = offset;
+
+            let elapsedTotal = 0;
+            for (let i = 0; i < currentIndex; i++) {
+                elapsedTotal += routine[i].duration;
+            }
+            elapsedTotal += (current.duration - timeRemaining);
+            const totalPercent = (elapsedTotal / totalWorkoutDuration) * 100;
+            totalProgressBar.style.width = `${totalPercent}%`;
+
+            const globalRemaining = totalWorkoutDuration - elapsedTotal;
+            totalTimeRemaining.textContent = `Total Left: ${formatTime(globalRemaining)}`;
+
+            renderPlaylist();
+        }
+
+        function tick() {
+            if (timeRemaining > 0) {
+                timeRemaining--;
+
+                if (voiceEnabled) {
+                    if (timeRemaining === 30) { speak("30 seconds remaining."); }
+                    else if (timeRemaining === 10) { speak("10 seconds left."); }
+                    else if (timeRemaining <= 3 && timeRemaining > 0) {
+                        speak(timeRemaining.toString());
+                        playBeep(600, 0.1);
+                    }
+                }
+                updateUI();
+            } else {
+                playBeep(880, 0.4);
+                if (currentIndex + 1 < routine.length) {
+                    currentIndex++;
+                    timeRemaining = routine[currentIndex].duration;
+                    const nextItem = routine[currentIndex];
+                    speak(`Stage complete. Starting ${nextItem.name} for ${Math.round(nextItem.duration / 60)} minutes.`);
+                    updateUI();
+                } else {
+                    pauseWorkout();
+                    speak("Workout complete! Outstanding intensity!");
+                    currentExerciseName.textContent = "Workout Complete! 🔥";
+                    currentExerciseDesc.textContent = "You've successfully conquered all 25 minutes of calisthenics!";
+                    timerDisplay.textContent = "00:00";
+                    startPauseBtn.disabled = true;
+                    startPauseBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            }
+        }
+
+        function startWorkout() {
+            if (isRunning) return;
+            isRunning = true;
+            startPauseIcon.className = "fa-solid fa-pause";
+            startPauseText.textContent = "Pause Workout";
+            startPauseBtn.classList.remove('bg-red-600', 'hover:bg-red-500', 'shadow-red-600/30');
+            startPauseBtn.classList.add('bg-neutral-800', 'hover:bg-neutral-700', 'text-amber-400');
+
+            if (timeRemaining === routine[currentIndex].duration) {
+                const current = routine[currentIndex];
+                speak(`Starting ${current.name}. Duration ${Math.round(current.duration / 60)} minutes. Go intense!`);
+            }
+            timerInterval = setInterval(tick, 1000);
+        }
+
+        function pauseWorkout() {
+            if (!isRunning) return;
+            isRunning = false;
+            clearInterval(timerInterval);
+            startPauseIcon.className = "fa-solid fa-play";
+            startPauseText.textContent = "Resume Workout";
+            startPauseBtn.classList.remove('bg-neutral-800', 'hover:bg-neutral-700', 'text-amber-400');
+            startPauseBtn.classList.add('bg-red-600', 'hover:bg-red-500', 'text-white');
+        }
+
+        function resetWorkout() {
+            pauseWorkout();
+            currentIndex = 0;
+            timeRemaining = routine[0].duration;
+            startPauseBtn.disabled = false;
+            startPauseBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            startPauseText.textContent = "Start Workout";
+            updateUI();
+            speak("Workout reset.");
+        }
+
+        function skipStage() {
+            if (currentIndex + 1 < routine.length) {
+                currentIndex++;
+                timeRemaining = routine[currentIndex].duration;
+                updateUI();
+                speak(`Skipped to ${routine[currentIndex].name}`);
+            } else {
+                speak("Already on the final stage.");
+            }
+        }
+
+        startPauseBtn.addEventListener('click', () => { isRunning ? pauseWorkout() : startWorkout(); });
+        resetBtn.addEventListener('click', resetWorkout);
+        skipBtn.addEventListener('click', skipStage);
+
+        voiceToggle.addEventListener('click', () => {
+            voiceEnabled = !voiceEnabled;
+            if (voiceEnabled) {
+                voiceIcon.className = "fa-solid fa-volume-high text-red-500 text-sm";
+                voiceText.textContent = "Voice: On";
+                speak("Voice coach enabled.");
+            } else {
+                voiceIcon.className = "fa-solid fa-volume-xmark text-neutral-500 text-sm";
+                voiceText.textContent = "Voice: Off";
+                if (speechSynth) speechSynth.cancel();
+            }
+        });
+
+        soundToggle.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            if (soundEnabled) {
+                soundIcon.className = "fa-solid fa-bell text-amber-500 text-sm";
+                soundText.textContent = "Beeps: On";
+                playBeep(523.25, 0.1);
+            } else {
+                soundIcon.className = "fa-solid fa-bell-slash text-neutral-500 text-sm";
+                soundText.textContent = "Beeps: Off";
+            }
+        });
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            ['timer', 'tools', 'manual'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`tabBtn-${t}`).className = "px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center space-x-2 text-neutral-400 hover:text-white hover:bg-neutral-800 cursor-pointer";
+            });
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tabBtn-${tabId}`).className = "px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center space-x-2 bg-red-600 text-white shadow-md shadow-red-600/30 cursor-pointer";
+        }
+
+        // Accordion Toggle
+        function toggleAccordion(contentId) {
+            const el = document.getElementById(contentId);
+            const icon = document.getElementById(`icon-${contentId}`);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                icon.className = "fa-solid fa-chevron-up text-red-500";
+            } else {
+                el.classList.add('hidden');
+                icon.className = "fa-solid fa-chevron-down text-neutral-400";
+            }
+        }
+
+        // Ideal Weight & Calorie Formulas Calculation
+        function calculateMetrics() {
+            const heightVal = parseFloat(document.getElementById('calcHeight').value);
+            const heightUnit = document.getElementById('heightUnit').value;
+            const weightKg = parseFloat(document.getElementById('calcWeightKg').value);
+            const profile = document.getElementById('calcProfile').value;
+
+            if (!heightVal || !weightKg) {
+                alert("Please enter both height and weight!");
+                return;
+            }
+
+            // Height in cm for formula
+            let heightCm = heightUnit === 'in' ? heightVal * 2.54 : heightVal;
+
+            // Ideal weight range estimation (Devine formula approximation for fitness)
+            let baseDevineKg = heightCm > 152.4 ? 50 + 0.91 * (heightCm - 152.4) : 50;
+            let idealMin = Math.round(baseDevineKg * 0.9);
+            let idealMax = Math.round(baseDevineKg * 1.15);
+
+            // Calorie multipliers based on formulas
+            let multiplier = 15;
+            if (profile === 'obesity') multiplier = 13;
+            else if (profile === 'normal') multiplier = 14;
+            else if (profile === 'workout') multiplier = 15;
+
+            let maintCals = Math.round(multiplier * 2.2 * weightKg);
+            let lossCals = Math.max(1200, maintCals - 500);
+            let gainCals = maintCals + 500;
+
+            document.getElementById('resIdealWeight').textContent = `${idealMin} kg - ${idealMax} kg`;
+            document.getElementById('resMaintCals').textContent = `${maintCals} kcal`;
+            document.getElementById('resLossCals').textContent = `${lossCals} kcal (-500 for fat loss)`;
+            document.getElementById('resGainCals').textContent = `${gainCals} kcal (+500 for mass gain)`;
+            document.getElementById('calcResults').classList.remove('hidden');
+        }
+
+        function setFoodQuery(query) {
+            document.getElementById('foodInput').value = query;
+        }
+
+        // AI Food Calorie Estimator using Gemini API
+        async function estimateCalories() {
+            const foodQuery = document.getElementById('foodInput').value.trim();
+            if (!foodQuery) {
+                alert("Please describe a food item or meal first!");
+                return;
+            }
+
+            const btn = document.getElementById('aiEstimateBtn');
+            const resultBox = document.getElementById('aiResultBox');
+            const contentDiv = document.getElementById('aiResultContent');
+            const titleSpan = document.getElementById('aiFoodTitle');
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i><span>Analyzing with Gemini AI...</span>`;
+            resultBox.classList.remove('hidden');
+            contentDiv.innerHTML = `<p class="text-neutral-400 italic">Calculating estimated calories and protein guidance...</p>`;
+            titleSpan.textContent = foodQuery;
+
+            const systemPrompt = "You are an AI Nutrition Coach. Analyze the food item provided by the user and give an estimated calorie count, estimated protein, and brief guidance adhering to the rule: 'Calories determine weight, Protein determines body composition. If you can't track protein, just count calories.' Keep the response concise, formatted cleanly in HTML tags or bullet points.";
+            
+            const apiKey = ""; // Canvas runtime provides API key automatically
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: foodQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            try {
+                let response = null;
+                // Exponential backoff retry
+                for (let attempt = 0; attempt < 3; attempt++) {
+                    try {
+                        response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (response.ok) break;
+                    } catch (err) {
+                        if (attempt === 2) throw err;
+                        await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 1000));
+                    }
+                }
+
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    const text = candidate.content.parts[0].text;
+                    contentDiv.innerHTML = `<div class="prose prose-invert text-xs sm:text-sm leading-relaxed">${text.replace(/\n/g, '<br>')}</div>`;
+                } else {
+                    contentDiv.innerHTML = `<p class="text-red-400">Could not estimate calories. Please try again.</p>`;
+                }
+            } catch (e) {
+                console.error("API error", e);
+                contentDiv.innerHTML = `<p class="text-red-400">Network or API error occurred. Please check connection.</p>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i><span>Estimate Calories & Protein</span>`;
+            }
+        }
+
+        window.onload = function() {
+            updateUI();
+        };
+    </script>
+</body>
+</html>
