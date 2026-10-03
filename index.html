@@ -11,9 +11,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #f3f4f6; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        body { font-family: 'Orbitron', sans-serif; background-color: #050505; color: #f3f4f6; }
+        
         
         /* Futuristic neon effects & animations */
         .cyber-glow {
@@ -64,9 +65,7 @@
         ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 3px; border: 1px solid #330000; }
         ::-webkit-scrollbar-thumb:hover { background: #dc2626; }
         /* Import from Google Fonts */
-body {
-  font-family: 'Roboto Mono', monospace;
-}
+ 
         
     </style>
 </head>
@@ -379,6 +378,7 @@ body {
                             <li>If you can't complete 8 reps, immediately regress to <strong class="text-white">partials or easier regressions</strong> to finish set reps.</li>
                             <li>Main goal: Hard progression every rep. If you hit 8 clean reps, move to a harder variation next time!</li>
                             <li>Rest time: <strong class="text-white">40-60 seconds</strong> between sets (due to the tight 25 min duration).</li>
+                             <li>Note: <strong class="text-white">Timers are there to stop you from doing too much, So the 25 mins is all it takes</strong></li>
                         </ul>
                     </div>
 
@@ -510,7 +510,7 @@ body {
                 <div class="bg-[#0c0c0c] border border-neutral-800 rounded-2xl p-5">
                     <div class="flex items-center justify-between cursor-pointer" onclick="toggleAccordion('upperback-content')">
                         <h4 class="font-bold text-white text-base flex items-center">
-                            <span class="bg-red-600 text-white text-xs px-2.5 py-1 rounded-lg mr-3 font-mono">4 Min</span>
+                            <span class="bg-red-600 text-white text-xs px-2.5 py-1 rounded-lg mr-3 font-mono">3 Min</span>
                             Upper Back
                         </h4>
                         <i class="fa-solid fa-chevron-down text-neutral-400" id="icon-upperback-content"></i>
@@ -607,9 +607,9 @@ body {
             { id: 3, name: "Rest", duration: 60, desc: "1 min rest: Deep breathing, hydrate, and recover before push.", icon: "fa-mug-hot" },
             { id: 4, name: "Push", duration: 240, desc: "4 min push: Pushups, incline/decline, archer, or planche progressions to failure.", icon: "fa-arrow-up-right-dots" },
             { id: 5, name: "Core", duration: 180, desc: "3 min core: Planks, leg raises, L-sits, and Dragon Flags.", icon: "fa-circle-dot" },
-            { id: 6, name: "Upper Back", duration: 240, desc: "4 min upper back: Elbow press variations or behind-the-neck pullups.", icon: "fa-shield-halved" },
+            { id: 6, name: "Upper Back", duration: 180, desc: "3 min upper back: Elbow press variations or behind-the-neck pullups.", icon: "fa-shield-halved" },
             { id: 7, name: "Legs", duration: 240, desc: "4 min legs: Squats, jumping squats, sissy squats, or pistol squat progressions.", icon: "fa-person-running" },
-            { id: 8, name: "Tricep", duration: 180, desc: "3 min tricep: Diamond pushups to failure + partial reps or bench dips.", icon: "fa-bolt" },
+            { id: 8, name: "Tricep", duration: 240, desc: "4 min tricep: Diamond pushups to failure + partial reps or bench dips.", icon: "fa-bolt" },
             { id: 9, name: "Stretch", duration: 60, desc: "1 min stretch: Toe touch, calf grab, and front splits.", icon: "fa-spa" }
         ];
 
@@ -983,5 +983,29 @@ body {
             updateUI();
         };
     </script>
+
+
+
+<script>
+let wakeLock;
+
+(async () => {
+    try {
+        wakeLock = await navigator.wakeLock.request("screen");
+    } catch (e) {
+        console.log(e);
+    }
+})();
+
+document.addEventListener("visibilitychange", async () => {
+    if (document.visibilityState === "visible") {
+        try {
+            wakeLock = await navigator.wakeLock.request("screen");
+        } catch (e) {}
+    }
+});
+</script>
+
+
 </body>
 </html>
